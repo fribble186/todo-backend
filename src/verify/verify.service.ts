@@ -19,10 +19,16 @@ export class VerifyService {
       );
     }
     verifyCode = verifyCode.toUpperCase();
-    this.verifyRepository.insert({
-      email,
-      code: verifyCode,
-    });
+    const oldVerify = await this.verifyRepository.findOne({ where: { email } });
+    if (oldVerify) {
+      oldVerify.code = verifyCode;
+      this.verifyRepository.save(oldVerify);
+    } else {
+      this.verifyRepository.insert({
+        email,
+        code: verifyCode,
+      });
+    }
     try {
       await this.mailerService.sendMail({
         from: 'todo_fribble186@163.com',

@@ -13,7 +13,10 @@ export class UserService {
 
   async login({ email, code }: { email: string; code: string }) {
     if (await this.verifyRepository.findOne({ where: { email, code } })) {
-      this.userRepositry.insert({ email });
+      const user = await this.userRepositry.findOne({ where: { email } });
+      if (!user) {
+        this.userRepositry.insert({ email });
+      }
       return { success: true };
     } else {
       return { success: false, message: '验证码错误' };
