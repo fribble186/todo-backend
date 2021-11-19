@@ -30,6 +30,11 @@ export class TodoService {
             // 原来有的 change，直接 change
             if (curTodoInDBIndex === -1) {
               delete curTodo['status'];
+              if (todoInDB.find((todo) => todo.id === curTodo.id)) {
+                curTodo.id = String(
+                  Math.max(...todoInDB.map((todo) => Number(todo.id))) + 1,
+                );
+              }
               todoInDB.push(curTodo);
             } else {
               delete curTodo['status'];
@@ -46,6 +51,11 @@ export class TodoService {
             // 原来没有的 add，直接 push
             if (curTodoInDBIndex === -1) {
               delete curTodo['status'];
+              if (todoInDB.find((todo) => todo.id === curTodo.id)) {
+                curTodo.id = String(
+                  Math.max(...todoInDB.map((todo) => Number(todo.id))) + 1,
+                );
+              }
               todoInDB.push(curTodo);
             }
           }
